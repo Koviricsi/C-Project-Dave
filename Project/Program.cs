@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Project
@@ -18,7 +20,7 @@ namespace Project
             var YearC = new RenderYears(2025, 5, 10);
             YearC.Render();
 
-            Console.ReadKey();
+            Thread.Sleep(-1);
         }
     }
 }

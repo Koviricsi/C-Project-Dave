@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Project
 {
     class RenderYears
     {
-        private List<string[]> Numbers = new List<string[]>();
-
         public int DefaultYear { get; set; }
         private int _height;
         private int _width;
         private int _centerX;
         private int _centerY;
 
-        public RenderYears(int year, int marginx, int marginy) 
-        { 
+        private Thread control;
+
+        public RenderYears(int year, int marginx, int marginy)
+        {
             DefaultYear = year;
             var width = (Console.LargestWindowWidth - marginx % 2 == 0) ? Console.LargestWindowWidth - marginx + 1 : Console.LargestWindowWidth - marginx;
             var height = (Console.LargestWindowHeight - marginy % 2 == 0) ? Console.LargestWindowHeight - marginy + 1 : Console.LargestWindowHeight - marginy;
@@ -29,30 +29,41 @@ namespace Project
             _height = height;
             _centerX = centerX;
             _centerY = centerY;
-            Numbers.Add(new string[] { " █████ ", "██   ██", "██   ██", "██   ██", "██   ██", "██   ██", " █████ " });
-            Numbers.Add(new string[] { "  ███  ", " ████  ", "█ ███  ", "  ███  ", "  ███  ", "  ███  ", "███████" });
-            Numbers.Add(new string[] { " █████ ", "█   ███", "    ███", "   ███ ", "  ███  ", " ███   ", "███████" });
-            Numbers.Add(new string[] { "", "", "", "", "", "", "" });
-        }
 
-        public void RenderLine(string text)
-        {
-            Console.Write("|".PadLeft(_centerX - (text.Length / 2) - 10, ' '));
-            Console.Write(text.PadLeft(text.Length + 10 - 1, ' '));
-            Console.Write("|\n".PadLeft(10, ' '));
+            control = new Thread(() =>
+            {
+                while (true)
+                {
+                    if (Console.KeyAvailable)
+                    {
+                        var key = Console.ReadKey(true).Key;
+                        if (key == ConsoleKey.UpArrow)
+                        {
+                            DefaultYear--;
+                            Console.Clear();
+                            Render();
+                        }
+                        else if (key == ConsoleKey.DownArrow)
+                        {
+                            DefaultYear++;
+                            Console.Clear();
+                            Render();
+                        }
+                    }
+                }
+            });
+            control.Start();
         }
 
         public void Render()
         {
-            foreach (var text in Numbers[0])
-                RenderLine(text);
+            var center = _centerX - (int)Math.Ceiling((DefaultYear.ToString().Length * 7.0 + (DefaultYear.ToString().Length + 1) * 3 + 2) / 2);
             Console.WriteLine();
-            foreach (var text in Numbers[1])
-                RenderLine(text);
+            Numbers.Render(DefaultYear - 1, center, 3, true);
             Console.WriteLine();
-            foreach (var text in Numbers[2])
-                RenderLine(text);
-
+            Numbers.Render(DefaultYear, center, 3, false);
+            Console.WriteLine();
+            Numbers.Render(DefaultYear + 1, center, 3, true);
         }
-        }
+    }
 }
