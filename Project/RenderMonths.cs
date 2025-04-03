@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace Project
 {
-    class RenderYears
+    class RenderMonths
     {
-        public int DefaultYear { get; set; }
-        public int SelectedYear { get; set; }
+        public int DefaultMonth { get; set; }
+        public int SelectedMonth { get; set; }
         private int _marginy;
         private int _centerX;
 
         private Thread control;
 
-        public RenderYears(int marginx, int marginy)
+        public RenderMonths(int marginx, int marginy)
         {
-            DefaultYear = DateTime.Now.Year;
-            SelectedYear = -1;
+            DefaultMonth = DateTime.Now.Month;
+            SelectedMonth = -1;
 
             var width = (Console.LargestWindowWidth - marginx % 2 == 0) ? Console.LargestWindowWidth - marginx + 1 : Console.LargestWindowWidth - marginx;
             var centerX = (int)Math.Ceiling(width / 2.0);
@@ -38,19 +38,19 @@ namespace Project
                     if (Console.KeyAvailable)
                     {
                         var key = Console.ReadKey(true).Key;
-                        if (key == ConsoleKey.UpArrow)
+                        if (key == ConsoleKey.UpArrow && DefaultMonth-1 > 0)
                         {
-                            DefaultYear--;
+                            DefaultMonth--;
                             Render();
                         }
-                        else if (key == ConsoleKey.DownArrow)
+                        else if (key == ConsoleKey.DownArrow && DefaultMonth + 1 <= 12)
                         {
-                            DefaultYear++;
+                            DefaultMonth++;
                             Render();
                         }
                         else if (key == ConsoleKey.Enter)
                         {
-                            SelectedYear = DefaultYear;
+                            SelectedMonth = DefaultMonth;
                             Console.Clear();
                             control.Abort();
                         }
@@ -62,13 +62,20 @@ namespace Project
         public int Render()
         {
             Console.Clear();
-            var center = _centerX - (int)Math.Ceiling((DefaultYear.ToString().Length * 7.0 + (DefaultYear.ToString().Length + 1) * 3 + 2) / 2);
+            var center = _centerX - (int)Math.Ceiling((DefaultMonth.ToString().Length * 7.0 + (DefaultMonth.ToString().Length + 1) * 3 + 2) / 2);
+
             Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear - 1, center, 3, true);
+
+            if (DefaultMonth - 1 > 0)
+                ASCIIChars.RenderText(DefaultMonth - 1, center, true);
+                Console.WriteLine();
+
+            ASCIIChars.RenderText(DefaultMonth, center, false);
             Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear, center, 3, false);
-            Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear + 1, center, 3, true);
+
+            if (DefaultMonth + 1 <= 12)
+                ASCIIChars.RenderText(DefaultMonth + 1, center, true);
+
             if (!control.IsAlive)
             {
                 CreateThread();
@@ -76,7 +83,7 @@ namespace Project
                 control.Start();
                 control.Join();
                 Console.WindowHeight = Console.LargestWindowHeight - _marginy;
-                return SelectedYear;
+                return SelectedMonth;
             }
             return -1;
         }

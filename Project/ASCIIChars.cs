@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project
 {
-    class Numbers
+    class ASCIIChars
     {
         private static List<string[]> numbers = new List<string[]>
             {
@@ -20,6 +20,28 @@ namespace Project
                 new string[] { "███████", "     ██", "     ██", "   ██  ", " ██    ", " ██    ", " ██    " },
                 new string[] { " █████ ", "██   ██", "██   ██", " █████ ", "██   ██", "██   ██", " █████ " },
                 new string[] { " █████ ", "██   ██", "██   ██", " ██████", "     ██", "     ██", " █████ " }
+            };
+
+        private static List<string[]> months = new List<string[]>
+            {
+                new string[] { "|      ███    ███    ███  ██  ██   ██    ███ █  █████    |",
+                               "|      ███    ███    ███  ██  ██   ██    ███ █  ██   ██  |",
+                               "|      ███   ██ ██   ██ █ ██  ██   ██   ██ ██   ██   ██  |",
+                               "|      ███   ██ ██   ██ █ ██  ██   ██   ██ ██   ██   ██  |",
+                               "|      ███  ███████  ██ █ ██  ██   ██  ███████  █████    |",
+                               "|  ██  ███  ██   ██  ██  ███  ██   ██  ██   ██  ██   ██  |",
+                               "|   █████   ██   ██  ██  ███   █████   ██   ██  ██   ██  |" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" },
+                new string[] { "", "", "", "", "", "", "" }
             };
 
         private static void Padding(int length, string character)
@@ -61,7 +83,7 @@ namespace Project
 
         }
 
-        public static void Render(int number, int pl, int pr, bool trans)
+        public static void RenderNum(int number, int pl, int pr, bool trans)
         {
             char chars = trans ? '▒' : '█';
 
@@ -98,10 +120,22 @@ namespace Project
             {
                 foreach (var text in numbers[number])
                 {
-                    RenderLine(text, pl, pr);
+                    RenderLine(text.Replace('█', chars), pl, pr);
                     Console.Write("\n");
                 }
             }
+        }
+
+        public static void RenderText(int number, int pl, bool trans)
+        {
+            char chars = trans ? '▒' : '█';
+
+            foreach (var text in months[number-1])
+            {
+                Console.Write(text.Replace('█', chars));
+                Console.Write("\n");
+            }
+
         }
     }
 }
