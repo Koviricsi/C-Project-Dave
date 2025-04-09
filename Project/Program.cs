@@ -42,7 +42,10 @@ namespace Project
             //asd.AddCalendarEvent(new DateTime(2025, 4, 9), Style.Parse("yellow"));
             //AnsiConsole.Write(asd);
 
-            
+            var test = new CalendarControl();
+            test.Render();
+
+
             // SAVE
             CalendarStorage.SaveAllData(calendarData, filePath);
         }
