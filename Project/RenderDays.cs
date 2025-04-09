@@ -7,21 +7,28 @@ using System.Threading.Tasks;
 
 namespace Project
 {
-    class RenderMonths
+    class RenderDays
     {
-        public int DefaultMonth { get; set; }
-        public int SelectedMonth { get; set; }
+        public int DefaultDay { get; set; }
+        public int SelectedDay { get; set; }
         private int _marginy;
+        private int _centerX;
+        private int _month;
+        private int _year;
 
         private Thread control;
 
-        public RenderMonths(int marginx, int marginy)
+        public RenderDays(int marginx, int marginy, int year, int month)
         {
-            DefaultMonth = DateTime.Now.Month;
-            SelectedMonth = -1;
+            DefaultDay = DateTime.Now.Day;
+            SelectedDay = -1;
+            _month = month;
+            _year = year;
 
             var width = (Console.LargestWindowWidth - marginx % 2 == 0) ? Console.LargestWindowWidth - marginx + 1 : Console.LargestWindowWidth - marginx;
             var centerX = (int)Math.Ceiling(width / 2.0);
+
+            _centerX = centerX;
 
             CreateThread();
         }
@@ -35,19 +42,19 @@ namespace Project
                     if (Console.KeyAvailable)
                     {
                         var key = Console.ReadKey(true).Key;
-                        if (key == ConsoleKey.UpArrow && DefaultMonth-1 > 0)
+                        if (key == ConsoleKey.UpArrow && DefaultDay - 1 > 0)
                         {
-                            DefaultMonth--;
+                            DefaultDay--;
                             Render();
                         }
-                        else if (key == ConsoleKey.DownArrow && DefaultMonth + 1 <= 12)
+                        else if (key == ConsoleKey.DownArrow && DefaultDay + 1 <= DateTime.DaysInMonth(_year, _month))
                         {
-                            DefaultMonth++;
+                            DefaultDay++;
                             Render();
                         }
                         else if (key == ConsoleKey.Enter)
                         {
-                            SelectedMonth = DefaultMonth;
+                            SelectedDay = DefaultDay;
                             Console.Clear();
                             control.Abort();
                         }
@@ -59,33 +66,34 @@ namespace Project
         public int Render()
         {
             Console.Clear();
+            var center = _centerX - (int)Math.Ceiling((DefaultDay.ToString().Length * 7.0 + (DefaultDay.ToString().Length + 1) * 3 + 2) / 2);
 
-            if (DefaultMonth-1 <= 0)
+            if (DefaultDay - 1 <= 0)
             {
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth, false);
+                ASCIIChars.RenderNum(DefaultDay, center, 3, false);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth+1, true);
+                ASCIIChars.RenderNum(DefaultDay + 1, center, 3, true);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth+2, true);
+                ASCIIChars.RenderNum(DefaultDay + 2, center, 3, true);
             }
-            else if(DefaultMonth+1 >= 13)
+            else if (DefaultDay + 1 >= DateTime.DaysInMonth(_year, _month))
             {
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth-2, true);
+                ASCIIChars.RenderNum(DefaultDay - 2, center, 3, true);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth-1, true);
+                ASCIIChars.RenderNum(DefaultDay - 1, center, 3, true);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth, false);
+                ASCIIChars.RenderNum(DefaultDay, center, 3, false);
 
             }
             else
             {
-                ASCIIChars.RenderText(DefaultMonth-1, true);
+                ASCIIChars.RenderNum(DefaultDay - 1, center, 3, true);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth, false);
+                ASCIIChars.RenderNum(DefaultDay, center, 3, false);
                 Console.WriteLine();
-                ASCIIChars.RenderText(DefaultMonth+1, true);
+                ASCIIChars.RenderNum(DefaultDay + 1, center, 3, true);
             }
 
             if (!control.IsAlive)
@@ -95,7 +103,7 @@ namespace Project
                 control.Start();
                 control.Join();
                 Console.WindowHeight = Console.LargestWindowHeight - _marginy;
-                return SelectedMonth;
+                return SelectedDay;
             }
             return -1;
         }

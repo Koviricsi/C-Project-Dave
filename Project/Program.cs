@@ -12,11 +12,8 @@ namespace Project
     class Program
     {
 
-        static void Default()
+        static void Default(int marginx, int marginy)
         {
-            var marginx = 10;
-            var marginy = 5;
-
             Console.SetWindowSize(1, 1);
             Console.SetBufferSize(Console.LargestWindowWidth - marginx, Console.LargestWindowHeight - marginy);
             Console.SetWindowSize(Console.LargestWindowWidth - marginx, Console.LargestWindowHeight - marginy);
@@ -26,15 +23,25 @@ namespace Project
 
         static async Task Main(string[] args)
         {
-            Default();
 
-            var YearCalendar = new RenderYears(5, 10);
-            var MonthCalendar = new RenderMonths(5, 10);
+            var marginx = 10;
+            var marginy = 5;
 
-            //await Task.Run(() => YearCalendar.Render());
+            Default(marginx,marginy);
 
-            var asd = await Task.Run(() => MonthCalendar.Render()); ;
-            Console.WriteLine(asd);
+            var YearCalendar = new RenderYears(marginx, marginy);
+            var a1 = await Task.Run(() => YearCalendar.Render());
+            
+
+            var MonthCalendar = new RenderMonths(marginx, marginy);
+            var a2 = await Task.Run(() => MonthCalendar.Render());
+
+            var DayCalendar = new RenderDays(marginx, marginy, YearCalendar.SelectedYear, MonthCalendar.SelectedMonth);
+            var a3 = await Task.Run(() => DayCalendar.Render());
+
+            Console.WriteLine(a1);
+            Console.WriteLine(a2);
+            Console.WriteLine(a3);
 
             Thread.Sleep(-1);
         }

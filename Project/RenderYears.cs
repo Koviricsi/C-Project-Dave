@@ -38,12 +38,12 @@ namespace Project
                     if (Console.KeyAvailable)
                     {
                         var key = Console.ReadKey(true).Key;
-                        if (key == ConsoleKey.UpArrow)
+                        if (key == ConsoleKey.UpArrow && DefaultYear - 1 > 0)
                         {
                             DefaultYear--;
                             Render();
                         }
-                        else if (key == ConsoleKey.DownArrow)
+                        else if (key == ConsoleKey.DownArrow && DefaultYear + 1 <= 9999)
                         {
                             DefaultYear++;
                             Render();
@@ -63,12 +63,35 @@ namespace Project
         {
             Console.Clear();
             var center = _centerX - (int)Math.Ceiling((DefaultYear.ToString().Length * 7.0 + (DefaultYear.ToString().Length + 1) * 3 + 2) / 2);
-            Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear - 1, center, 3, true);
-            Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear, center, 3, false);
-            Console.WriteLine();
-            ASCIIChars.RenderNum(DefaultYear + 1, center, 3, true);
+
+            if (DefaultYear - 1 <= 0)
+            {
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear, center, 3, false);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear + 1, center, 3, true);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear + 2, center, 3, true);
+            }
+            else if (DefaultYear + 1 >= 9999)
+            {
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear - 2, center, 3, true);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear - 1, center, 3, true);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear, center, 3, false);
+
+            }
+            else
+            {
+                ASCIIChars.RenderNum(DefaultYear - 1, center, 3, true);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear, center, 3, false);
+                Console.WriteLine();
+                ASCIIChars.RenderNum(DefaultYear + 1, center, 3, true);
+            }
+
             if (!control.IsAlive)
             {
                 CreateThread();
