@@ -32,22 +32,6 @@ namespace Project
             var marginy = 5;
 
             Default(marginx, marginy);
-            ////var asd = new RenderYears(marginx, marginy);
-            ////asd.Render();
-
-            ////var asd1 = new RenderMonths(marginx, marginy);
-            ////asd1.Render();
-
-            ////var asd2 = new RenderDays(marginx, marginy, asd.SelectedYear, asd1.SelectedMonth);
-            ////asd2.Render();
-            ///
-
-            var calendar = new CalendarControl();
-
-            calendar.Render(true);
-            Console.WriteLine(calendar.SelectedDate);
-
-            Console.ReadKey(true);
 
         }
     }

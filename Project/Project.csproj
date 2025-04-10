@@ -92,16 +92,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASCIIChars.cs" />
     <Compile Include="CalendarControl.cs" />
     <Compile Include="CalendarManager.cs" />
     <Compile Include="CalendarStorage.cs" />
     <Compile Include="DailyData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenderDays.cs" />
-    <Compile Include="RenderMonths.cs" />
-    <Compile Include="RenderYears.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
