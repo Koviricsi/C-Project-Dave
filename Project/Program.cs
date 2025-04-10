@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 using Spectre.Console;
+using Spectre.Console.Rendering;
+using System.Windows;
 
 
 namespace Project
@@ -33,6 +35,23 @@ namespace Project
 
             Default(marginx, marginy);
 
+            var calendar = new CalendarControl();
+
+            var a = new Calendar(new DateTime(2025, 04, 10));
+            a.Border = TableBorder.DoubleEdge;
+            AnsiConsole.Write(a);
+
+            Console.InputEncoding = Console.OutputEncoding = Encoding.UTF8;
+            AnsiConsole.Status()
+                .Spinner(Spinner.Known.Dots10)
+                .Start("Loading...", ctx =>
+                {
+                    while (true)
+                    {
+                        int i = 0;
+                        i++;
+                    }
+                });
         }
     }
 }

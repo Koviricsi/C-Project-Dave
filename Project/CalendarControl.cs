@@ -24,7 +24,7 @@ namespace Project
             _calendar = new Calendar(now.Year, now.Month, now.Day);
             _calendar.Culture("hu-HU");
             _calendar.BorderStyle(Style.Parse("yellow"));
-            _calendar.HeaderStyle(Style.Parse("blue"));
+            _calendar.HeaderStyle(Style.Parse("dodgerblue1"));
             _calendar.Alignment(Justify.Center);
             _calendar.AddCalendarEvent("Mai nap",new DateTime(now.Year, now.Month, now.Day), Style.Parse("blue"));
 
