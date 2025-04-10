@@ -76,7 +76,7 @@ namespace Project
             });
         }
 
-        public void Render()
+        public void Render(bool isMainRender = false)
         {
             AnsiConsole.Clear();
             Console.WriteLine();
@@ -88,6 +88,10 @@ namespace Project
                 _monthSelect.Start();
             }
             Console.WriteLine();
+            if (isMainRender)
+            {
+             _monthSelect.Join();
+            }
         }
 
         public void Clear()
@@ -96,27 +100,27 @@ namespace Project
             AnsiConsole.Clear();
         }
 
-        public void AddCalendarEvent(DateTime date)
+        public void AddCalendarEvent(int year, int month, int day)
         {
             var now = DateTime.Now;
-            if (date.Year == now.Year
-                && date.Month == now.Month
-                && date.Day == now.Day)
+            if (year == now.Year
+                && month == now.Month
+                && day == now.Day)
             {
-                _calendar.AddCalendarEvent(date);
+                _calendar.AddCalendarEvent(new DateTime(year,month,day));
             }
-            _calendar.AddCalendarEvent(date, Style.Parse("aqua"));
+            _calendar.AddCalendarEvent(new DateTime(year, month, day), Style.Parse("aqua"));
             _events = _calendar.CalendarEvents.ToArray();
         }
 
-        public void RemoveCalendarEvent(DateTime date)
+        public void RemoveCalendarEvent(int year, int month, int day)
         {
             var now = DateTime.Now;
             foreach (var item in _events)
             {
-                if (item.Year == date.Year 
-                    && item.Month == date.Month
-                    && item.Day == date.Day)
+                if (item.Year == year 
+                    && item.Month == month
+                    && item.Day == day)
                 {
                     if (_events[0] != item)
                     {

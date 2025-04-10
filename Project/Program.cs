@@ -32,59 +32,23 @@ namespace Project
             var marginy = 5;
 
             Default(marginx, marginy);
+            ////var asd = new RenderYears(marginx, marginy);
+            ////asd.Render();
 
-            string filePath = "calendar_data.json";
+            ////var asd1 = new RenderMonths(marginx, marginy);
+            ////asd1.Render();
 
-            var calendarData = CalendarStorage.LoadAllData(filePath); //-> Ez egy Dictionary HA letezik akkor visszaadja az elmentettet ha nem akkor egy ujat ad vissza
+            ////var asd2 = new RenderDays(marginx, marginy, asd.SelectedYear, asd1.SelectedMonth);
+            ////asd2.Render();
+            ///
 
-            //var asd = new Calendar(2025, 4, 9);
-            //asd.Culture("hu-HU");
-            //asd.AddCalendarEvent(new DateTime(2025, 4, 9), Style.Parse("yellow"));
-            //AnsiConsole.Write(asd);
+            var calendar = new CalendarControl();
 
-            var test = new CalendarControl();
-            test.Render();
+            calendar.Render(true);
+            Console.WriteLine(calendar.SelectedDate);
 
+            Console.ReadKey(true);
 
-            // SAVE
-            CalendarStorage.SaveAllData(calendarData, filePath);
-        }
-    }
-    public class DailyData
-    {
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public int Day { get; set; }
-        public List<string> ToDo { get; set; }
-    }
-
-    public static class CalendarStorage
-    {
-        public static void SaveAllData(Dictionary<string, DailyData> allData, string filePath)
-        {
-            var json = JsonSerializer.Serialize(allData,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }
-            );
-            File.WriteAllText(filePath, json);
-        }
-
-        public static Dictionary<string, DailyData> LoadAllData(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                return new Dictionary<string, DailyData>();
-            }
-
-            string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<Dictionary<string, DailyData>>(json);
-        }
-
-        public static string GetDateKey(int year, int month, int day)
-        {
-            return $"{year:D4}-{month:D2}-{day:D2}";
         }
     }
 }
