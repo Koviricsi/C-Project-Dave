@@ -10,6 +10,7 @@ namespace Project
 {
     class CalendarControl
     {
+        public bool isClosing;
         private int _year;
         private int _month;
         private int _day;
@@ -20,6 +21,7 @@ namespace Project
 
         public CalendarControl()
         {
+            isClosing = false;
             var now = DateTime.Now;
             _calendar = new Calendar(now.Year, now.Month, now.Day);
             _calendar.Culture("hu-HU");
@@ -70,6 +72,10 @@ namespace Project
                         else if (key == ConsoleKey.Enter)
                         {
                             SetSelectedDate();
+                        }
+                        else if (key == ConsoleKey.Escape) {
+                            isClosing = true;
+                            Clear();
                         }
                     }
                 }
