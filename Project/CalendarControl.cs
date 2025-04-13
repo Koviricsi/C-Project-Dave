@@ -162,6 +162,7 @@ namespace Project
                         if (int.TryParse(inputBuffer, out int day) && day > 0 && day <= daysInMonth)
                         {
                             _selectedDate = new DateTime(_year, _month, day);
+                            Console.WriteLine("\n");
                             break;
                         }
                         else

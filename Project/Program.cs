@@ -57,28 +57,30 @@ namespace Project
                 if (calendarData.TryGetValue(dateKey, out DailyData dayData)) {
                     // DEV: majd ebben az esetben lehet felhozni ezen opciokat: Új event hozzadasa, Régi event torlese, Nap törlese
 
-                    AnsiConsole.MarkupLine($"\n[yellow]Eventek: {dateKey}:[/]");
-                    foreach (var task in dayData.ToDo) {
-                        AnsiConsole.MarkupLine($"[bold cyan]-[/] {task}");
-                    }
+                    var rootdate = new Tree("[gold1 bold]"+dayData.ToString()+"[/]");
+                    rootdate.Style("lightgoldenrod2_1");
+                    rootdate.AddNodes(dayData.ToDo.Select(text => new Markup("[orange1]"+text+"[/]")));
+                    AnsiConsole.Write(rootdate);
+                    Console.WriteLine();
+
                     var option = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
-                            .Title("Opciok:")
+                            .Title("[dodgerblue2]Opciók:[/]")
                             .PageSize(10)
                             .AddChoices(new[] {
-                            "Add new event", "Remove old event", "Delet Day", "Back"
+                            "Esemény hozzáadása", "Esemény törlése", "Összes esemény törlése", "Vissza"
                     }));
 
-                    if (option == "Add new event") {
+                    if (option == "Esemény hozzáadása") {
                         var newEvent = AnsiConsole.Prompt(
-                            new TextPrompt<string>("Name your event: "));
+                            new TextPrompt<string>("Nevezd el az eseményt: "));
                         CalendarManager.AddTask(calendarData, calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day, newEvent);
                         CalendarStorage.SaveAllData(calendarData, filePath);
 
                     }
-                    if (option == "Remove old event") {
+                    if (option == "Esemény törlése") {
                         var oldEvent = AnsiConsole.Prompt(
-                            new TextPrompt<string>("Name the event to delete: "));
+                            new TextPrompt<string>("Törölni kívánt esemény neve: "));
 
                         bool notFound = true;
 
@@ -86,37 +88,37 @@ namespace Project
                             if (dayData.ToDo[i] == oldEvent) {
                                 CalendarManager.RemoveTask(calendarData, calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day, oldEvent);
                                 CalendarStorage.SaveAllData(calendarData, filePath);
-                                AnsiConsole.MarkupLine($"\n[grey]{oldEvent} deleted from the day.[/]");
+                                AnsiConsole.MarkupLine($"\n[grey]{oldEvent} törlésre került.[/]");
                                 notFound = false;
                                 break;
                             }
                         }
 
                         if (notFound) {
-                            AnsiConsole.MarkupLine($"\n[grey]{oldEvent} not found.[/]");
+                            AnsiConsole.MarkupLine($"\n[grey]{oldEvent} nem található.[/]");
                         }
                     }
-                    if (option == "Delet Day") {
+                    if (option == "Összes esemény törlése") {
                         CalendarManager.DeleteDay(calendarData, calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day);
                         calendar.RemoveCalendarEvent(calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day);
                         CalendarStorage.SaveAllData(calendarData, filePath);
                     }
-                    if (option == "Back") {
+                    if (option == "Vissza") {
                         continue;
                     }
 
                 } else {
                     // DEV: majd ebben az esetben lehet felhozni opciot: event hozzadas
-                    AnsiConsole.MarkupLine($"\n[grey]Nincs event ezen a napon {dateKey}.[/]");
+                    AnsiConsole.MarkupLine($"\n[grey]Nincs esemény ezen a napon: {dateKey}.[/]\n");
                     var option = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
-                            .Title("Opciok:")
+                            .Title("[dodgerblue2]Opciók:[/]")
                             .PageSize(10)
                             .AddChoices(new[] {
-                            "Add event(s) to this day", "Back"
+                            "Esemény(ek) hozzáadása ehhez a naphoz", "Vissza"
                     }));
-                    if (option == "Add event(s) to this day") {
-                        Console.WriteLine("Add meg az eventeket ilyen (event1;event2;event3):");
+                    if (option == "Esemény(ek) hozzáadása ehhez a naphoz") {
+                        AnsiConsole.MarkupLine("[aqua]Adja meg az [yellow]esemény(ek)et[/] a megadott formátumban [yellow](esemény1;esemény2;esemény3):[/][/]");
                         string inp = Console.ReadLine();
                         var elemek = inp.Split(';');
 
@@ -127,7 +129,7 @@ namespace Project
                         CalendarStorage.SaveAllData(calendarData, filePath);
                     }
 
-                    if (option == "Back") {
+                    if (option == "Vissza") {
                         continue;
                     }
                 }

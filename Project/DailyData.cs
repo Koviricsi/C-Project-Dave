@@ -12,5 +12,10 @@ namespace Project
         public int Month { get; set; }
         public int Day { get; set; }
         public List<string> ToDo { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Year}.{Month:D2}.{Day:D2}";
+        }
     }
 }
