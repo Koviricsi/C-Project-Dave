@@ -38,7 +38,6 @@ namespace Project
                 calendar.AddCalendarEvent(i.Year,i.Month,i.Day);
             }
 
-            // RICSI STUFF
             var marginx = 10;
             var marginy = 5;
 
@@ -55,7 +54,6 @@ namespace Project
                 var dateKey = CalendarStorage.GetDateKey(calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day);
 
                 if (calendarData.TryGetValue(dateKey, out DailyData dayData)) {
-                    // DEV: majd ebben az esetben lehet felhozni ezen opciokat: Új event hozzadasa, Régi event torlese, Nap törlese
 
                     var rootdate = new Tree("[gold1 bold]"+dayData.ToString()+"[/]");
                     rootdate.Style("lightgoldenrod2_1");
@@ -111,7 +109,6 @@ namespace Project
                     }
 
                 } else {
-                    // DEV: majd ebben az esetben lehet felhozni opciot: event hozzadas
                     AnsiConsole.MarkupLine($"\n[grey]Nincs esemény ezen a napon: {dateKey}.[/]\n");
                     var option = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
