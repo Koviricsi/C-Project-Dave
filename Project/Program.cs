@@ -86,7 +86,10 @@ namespace Project
 
                         for (int i = 0; i < dayData.ToDo.Count; i++) {
                             if (dayData.ToDo[i] == oldEvent) {
-                                CalendarManager.RemoveTask(calendarData, calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day, oldEvent);
+                                if (CalendarManager.RemoveTask(calendarData, calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day, oldEvent)) 
+                                {
+                                    calendar.RemoveCalendarEvent(calendar.SelectedDate.Year, calendar.SelectedDate.Month, calendar.SelectedDate.Day);
+                                }
                                 CalendarStorage.SaveAllData(calendarData, filePath);
                                 AnsiConsole.MarkupLine($"\n[grey]{oldEvent} törlésre került.[/]");
                                 notFound = false;

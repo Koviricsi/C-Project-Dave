@@ -53,7 +53,13 @@ namespace Project
             string key = $"{year:D4}-{month:D2}-{day:D2}";
             if (data.TryGetValue(key, out var dayData))
             {
-                return dayData.ToDo.Remove(task);
+                dayData.ToDo.Remove(task);
+                if (dayData.ToDo.Count == 0)
+                {
+                    data.Remove(key);
+
+                    return true;
+                }
             }
 
             return false;
